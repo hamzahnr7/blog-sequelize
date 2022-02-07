@@ -1,5 +1,5 @@
 import { RequestHandler, Router } from 'express';
-import { userRouter } from './routes';
+import { authRoutes, userRoutes } from './routes';
 
 const router = Router();
 
@@ -8,8 +8,10 @@ router.get('/', (async (req, res, next) => {
   res.render('index', { title: 'Express' });
 }) as RequestHandler);
 
+router.use('/', authRoutes);
+
 //#region users
-router.use('/users', userRouter);
+router.use('/users', userRoutes);
 //#endregion
 
 export default router;

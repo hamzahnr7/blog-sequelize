@@ -38,9 +38,11 @@ export const user = (sequelize: Sequelize, DT: typeof DataTypes) => {
       sequelize,
       modelName: 'user',
       underscored: true,
+      defaultScope: { attributes: { exclude: ['password'] } },
       hooks: {
         beforeCreate: async (doc) => {
-          hashPassword(doc.password);
+          doc.password = await hashPassword(doc.password);
+          return;
         },
       },
     },

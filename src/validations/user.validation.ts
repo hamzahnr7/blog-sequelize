@@ -1,5 +1,4 @@
-import expressAsyncHandler from 'express-async-handler';
-import { body, param, validationResult } from 'express-validator';
+import { body, param } from 'express-validator';
 import { validationMw } from '../middlewares/validation.middleware';
 
 export interface CreateUserDTO {
@@ -25,14 +24,11 @@ export class UserValidation {
 
   getUser = [param('userId'), validationMw];
 
-  updateUser = [
-    param('userId').isNumeric({ no_symbols: true }),
+  updateMe = [
     body('name').isString().isLength({ max: 255 }),
     body('birthdate').isDate().optional(),
     validationMw,
   ];
-
-  deleteUser = [param('userId').isNumeric({ no_symbols: true }), validationMw];
 }
 
 export default new UserValidation();
