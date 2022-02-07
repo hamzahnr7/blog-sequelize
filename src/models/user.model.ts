@@ -1,7 +1,10 @@
 import { DataTypes, Model, Sequelize } from 'sequelize';
 import { Models } from '.';
+import { hashPassword } from '../utils/bcrypt.helper';
 
 export class User extends Model {
+  password!: string;
+
   /**
    * Helper method for defining associations.
    * This method is not a part of Sequelize lifecycle.
@@ -35,6 +38,11 @@ export const user = (sequelize: Sequelize, DT: typeof DataTypes) => {
       sequelize,
       modelName: 'user',
       underscored: true,
+      hooks: {
+        beforeCreate: async (doc) => {
+          hashPassword(doc.password);
+        },
+      },
     },
   );
 

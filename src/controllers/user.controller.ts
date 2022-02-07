@@ -1,17 +1,33 @@
 import expressAsyncHandler from 'express-async-handler';
 import userService, { UserService } from '../services/user.service';
+import { CreateUserDTO, UpdateUserDTO } from '../validations/user.validation';
 
-class UserController {
+export class UserController {
   constructor(private userService: UserService) {}
 
-  getUsers = expressAsyncHandler(async (req, res, next) => {
-    const users = await this.userService.getUsers();
-    res.send(users);
+  createUser = expressAsyncHandler<{}, any, CreateUserDTO>(async (req, res) => {
+    const user = await this.userService.createUser(req.body);
+    res.status(201).json(user);
   });
 
-  getUser = expressAsyncHandler<{ userId: number }>(async (req, res, next) => {
-    const user = await this.userService.getUser(req.params.userId);
-    res.send(user);
+  getUsers = expressAsyncHandler(async (req, res) => {
+    const users = await this.userService.getUsers();
+    res.json({ result: users });
+  });
+
+  getUser = expressAsyncHandler<{ userId: string }>(async (req, res) => {
+    const user = await this.userService.getUser(parseInt(req.params.userId));
+    res.json(user);
+  });
+
+  updateUser = expressAsyncHandler<{ userId: string }, any, UpdateUserDTO>(async (req, res) => {
+    const updatedUser = await this.userService.updateUser(parseInt(req.params.userId), req.body);
+    res.json(updatedUser);
+  });
+
+  deleteUser = expressAsyncHandler<{ userId: string }>(async (req, res) => {
+    const deletedUser = await this.userService.deleteUser(parseInt(req.params.userId));
+    res.json(deletedUser);
   });
 }
 
