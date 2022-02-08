@@ -1,9 +1,26 @@
-import { DataTypes, Model, Sequelize } from 'sequelize';
+import { CreationOptional, DataTypes, Model, Optional, Sequelize } from 'sequelize';
 import { Models } from '.';
 import { hashPassword } from '../utils/bcrypt.helper';
 
-export class User extends Model {
-  password!: string;
+type UserAttributes = {
+  id: number;
+  name: string;
+  email: string;
+  password: string;
+  birthdate?: Date;
+};
+
+type UserCreationAttributes = Optional<UserAttributes, 'id'>;
+
+export class User extends Model<UserAttributes, UserCreationAttributes> {
+  declare id: CreationOptional<number>;
+  declare name: string;
+  declare email: string;
+  declare password: string;
+  declare birthdate: Date | null;
+
+  declare createdAt: CreationOptional<Date>;
+  declare updatedAt: CreationOptional<Date>;
 
   /**
    * Helper method for defining associations.
@@ -18,6 +35,12 @@ export class User extends Model {
 export const user = (sequelize: Sequelize, DT: typeof DataTypes) => {
   User.init(
     {
+      id: {
+        type: DT.BIGINT,
+        allowNull: false,
+        autoIncrement: true,
+        primaryKey: true,
+      },
       name: {
         type: DT.STRING,
         allowNull: false,
@@ -25,13 +48,29 @@ export const user = (sequelize: Sequelize, DT: typeof DataTypes) => {
       email: {
         type: DT.STRING,
         allowNull: false,
+        unique: true,
+        validate: {
+          isEmail: { msg: 'Email is invalid' },
+        },
       },
       password: {
         type: DT.STRING,
         allowNull: false,
+        validate: {
+          len: {
+            args: [8, 32],
+            msg: 'Password must be between 8 and 32 characters',
+          },
+        },
       },
       birthdate: {
         type: DT.DATE,
+        validate: {
+          isDate: {
+            args: true,
+            msg: 'Date is invalid',
+          },
+        },
       },
     },
     {

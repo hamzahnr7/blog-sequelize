@@ -17,12 +17,15 @@ export class UserService {
     return user;
   }
 
-  async updateMe(myUserId: number, updateUserDTO: UpdateUserDTO) {
-    console.log(myUserId);
-    const updatedProfile = await this.database.user.update(updateUserDTO, {
-      where: { id: myUserId },
-      returning: true,
-    });
+  async updateUser(myUserId: number, updateUserDTO: UpdateUserDTO) {
+    const { name, birthdate } = updateUserDTO;
+    const updatedProfile = await this.database.user.update(
+      { name, birthdate },
+      {
+        where: { id: myUserId },
+        returning: true,
+      },
+    );
     return updatedProfile;
   }
 }

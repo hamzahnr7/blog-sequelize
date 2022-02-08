@@ -11,7 +11,7 @@ export class UserController {
   });
 
   getMe = expressAsyncHandler(async (req, res) => {
-    const user = await this.userService.getUser(parseInt(req.user?.getDataValue('id') as string));
+    const user = await this.userService.getUser(req.user?.id!);
     res.json(user);
   });
 
@@ -21,10 +21,7 @@ export class UserController {
   });
 
   updateMe = expressAsyncHandler<any, any, UpdateUserDTO>(async (req, res) => {
-    const updatedProfile = this.userService.updateMe(
-      parseInt(req.user?.getDataValue('id') as string),
-      req.body,
-    );
+    await this.userService.updateUser(req.user?.id!, req.body);
     res.status(204).json();
   });
 }

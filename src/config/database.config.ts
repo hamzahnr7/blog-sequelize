@@ -14,7 +14,7 @@ const databaseConfig: DatabaseConfig = {
   development: {
     url: 'postgres://postgres:postgres@localhost:5432/blog_sequelize',
     dialect: 'postgres',
-    logging: true,
+    logging: console.log,
   },
   test: {
     url: 'postgres://postgres:postgres@localhost:5432/blog_sequelize',

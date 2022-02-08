@@ -1,5 +1,8 @@
+import compression from 'compression';
 import cookieParser from 'cookie-parser';
+import cors from 'cors';
 import e, { ErrorRequestHandler } from 'express';
+import helmet from 'helmet';
 import createHttpError from 'http-errors';
 import morgan from 'morgan';
 import path from 'path';
@@ -11,6 +14,9 @@ const app = e();
 app.set('views', path.join(__dirname, '..', 'views'));
 app.set('view engine', 'pug');
 
+app.use(compression());
+app.use(helmet());
+app.use(cors());
 app.use(morgan('dev'));
 app.use(e.json());
 app.use(e.urlencoded({ extended: false }));
