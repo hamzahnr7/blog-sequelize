@@ -1,5 +1,5 @@
 import { RequestHandler, Router } from 'express';
-import { authRoutes, postRoutes, userRoutes } from './routes';
+import { authRoutes, commentRoutes, postRoutes, userRoutes } from './routes';
 
 const router = Router();
 
@@ -12,5 +12,6 @@ router.use('/', authRoutes);
 
 router.use('/users', userRoutes);
 router.use('/posts', postRoutes);
+router.use('/comments', commentRoutes);
 
 export default router;

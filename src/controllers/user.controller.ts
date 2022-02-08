@@ -2,6 +2,8 @@ import expressAsyncHandler from 'express-async-handler';
 import userService, { UserService } from '../services/user.service';
 import { UpdateUserDTO } from '../validations/user.validation';
 
+type UserControllerId = { userId: string };
+
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
@@ -20,7 +22,12 @@ export class UserController {
     res.json(user);
   });
 
-  getUser = expressAsyncHandler<{ userId: string }>(async (req, res) => {
+  getMyComments = expressAsyncHandler(async (req, res) => {
+    const user = await this.userService.getMyComments(req.user?.id!);
+    res.json(user);
+  });
+
+  getUser = expressAsyncHandler<UserControllerId>(async (req, res) => {
     const user = await this.userService.getUser(parseInt(req.params.userId));
     res.json(user);
   });

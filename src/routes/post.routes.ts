@@ -11,6 +11,8 @@ postRoutes
 postRoutes
   .use(authMw)
   .post('/', postValidation.createPost, postController.createPost)
+  .post('/:postId/comments', postValidation.addPostComment, postController.addPostComment)
+  .get('/:postId/comments', postValidation.getPostComments, postController.getPostComments)
   .patch('/:postId', postValidation.updatePost, postController.updatePost)
   .patch('/:postId/publish', postValidation.publishPost, postController.publishPost)
   .delete('/:postId', postValidation.deletePost, postController.deletePost);

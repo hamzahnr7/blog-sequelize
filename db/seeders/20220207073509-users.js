@@ -1,14 +1,14 @@
 'use strict';
 
 const { hash, genSalt } = require('bcrypt');
-const Sequelize = require('sequelize');
+const sequelize = require('sequelize');
 
 const hashPassword = async (password) => await hash(password, await genSalt(12));
 
 module.exports = {
   /**
-   * @param {Sequelize.QueryInterface} queryInterface
-   * @param {Sequelize} Sequelize
+   * @param {sequelize.QueryInterface} queryInterface
+   * @param {sequelize} Sequelize
    */
   async up(queryInterface, Sequelize) {
     /**
@@ -21,6 +21,9 @@ module.exports = {
      * }], {});
      */
 
+    /**
+     * @type {{id: number; name: string; email: string; password: string; birthdate?: Date; created_at: Date; updated_at: Date}[]}
+     */
     const users = [
       {
         id: 1,
@@ -30,13 +33,21 @@ module.exports = {
         created_at: new Date(),
         updated_at: new Date(),
       },
+      {
+        id: 2,
+        name: 'Samara98',
+        email: 'samara98@mailsac.com',
+        password: await hashPassword('asdf1346'),
+        created_at: new Date(),
+        updated_at: new Date(),
+      },
     ];
     await queryInterface.bulkInsert('users', users);
   },
 
   /**
-   * @param {Sequelize.QueryInterface} queryInterface
-   * @param {Sequelize} Sequelize
+   * @param {sequelize.QueryInterface} queryInterface
+   * @param {sequelize} Sequelize
    */
   async down(queryInterface, Sequelize) {
     /**

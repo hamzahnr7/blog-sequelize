@@ -32,6 +32,9 @@ export class User extends Model<UserAttributes, UserCreationAttributes> {
     this.hasMany(models.post, {
       foreignKey: 'authorId',
     });
+    this.hasMany(models.comment, {
+      foreignKey: 'commentatorId',
+    });
   }
 }
 

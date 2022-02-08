@@ -1,11 +1,11 @@
 'use strict';
 
-const Sequelize = require('sequelize');
+const sequelize = require('sequelize');
 
 module.exports = {
   /**
-   * @param {Sequelize.QueryInterface} queryInterface
-   * @param {Sequelize} Sequelize
+   * @param {sequelize.QueryInterface} queryInterface
+   * @param {sequelize} Sequelize
    */
   async up(queryInterface, Sequelize) {
     await queryInterface.createTable('users', {
@@ -36,22 +36,22 @@ module.exports = {
       },
       createdAt: {
         type: Sequelize.DATE,
+        field: 'created_at',
         allowNull: false,
         defaultValue: Sequelize.NOW,
-        field: 'created_at',
       },
       updatedAt: {
         type: Sequelize.DATE,
+        field: 'updated_at',
         allowNull: false,
         defaultValue: Sequelize.NOW,
-        field: 'updated_at',
       },
     });
   },
 
   /**
-   * @param {Sequelize.QueryInterface} queryInterface
-   * @param {Sequelize} Sequelize
+   * @param {sequelize.QueryInterface} queryInterface
+   * @param {sequelize} Sequelize
    */
   async down(queryInterface, Sequelize) {
     await queryInterface.dropTable('users');

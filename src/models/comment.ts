@@ -1,22 +1,22 @@
 import { CreationOptional, DataTypes, Model, Optional, Sequelize } from 'sequelize';
 import { Models } from '.';
 
-type PostAttributes = {
+type CommentAttributes = {
   id: number;
-  authorId?: number;
-  title: string;
+  commentatorId: number;
+  postId: number;
   content: string;
-  isPublished?: boolean;
+  hidden?: boolean;
 };
 
-type PostCreationAttributes = Optional<PostAttributes, 'id'>;
+type CommentCreationAttributes = Optional<CommentAttributes, 'id'>;
 
-export class Post extends Model<PostAttributes, PostCreationAttributes> {
+export class Comment extends Model<CommentAttributes, CommentCreationAttributes> {
   declare id: CreationOptional<number>;
-  declare authorId: number | null;
-  declare title: string;
+  declare commentatorId: number;
+  declare postId: number;
   declare content: string;
-  declare boolean: boolean;
+  declare hidden: boolean;
 
   declare createdAt: CreationOptional<Date>;
   declare updatedAt: CreationOptional<Date>;
@@ -29,15 +29,14 @@ export class Post extends Model<PostAttributes, PostCreationAttributes> {
   static associate(models: Models) {
     // define association here
     this.belongsTo(models.user, {
-      foreignKey: 'authorId',
-      as: 'author',
+      foreignKey: 'commentatorId',
     });
-    this.hasMany(models.comment);
+    this.belongsTo(models.post);
   }
 }
 
-export const post = (sequelize: Sequelize, DT: typeof DataTypes) => {
-  Post.init(
+export const comment = (sequelize: Sequelize, DT: typeof DataTypes) => {
+  Comment.init(
     {
       id: {
         type: DT.BIGINT,
@@ -45,39 +44,30 @@ export const post = (sequelize: Sequelize, DT: typeof DataTypes) => {
         autoIncrement: true,
         primaryKey: true,
       },
-      authorId: {
+      commentatorId: {
         type: DT.BIGINT,
-        field: 'author_id',
-        references: {
-          model: 'users',
-          key: 'id',
-        },
-        validate: {
-          isInt: true,
-        },
+        field: 'commentator_id',
       },
-      title: {
-        type: DT.STRING,
-        allowNull: false,
+      postId: {
+        type: DT.BIGINT,
+        field: 'post_id',
       },
       content: {
         type: DT.TEXT,
         allowNull: false,
-        defaultValue: '',
       },
-      isPublished: {
+      hidden: {
         type: DT.BOOLEAN,
-        field: 'is_published',
         allowNull: false,
         defaultValue: false,
       },
     },
     {
       sequelize,
-      modelName: 'post',
+      modelName: 'comment',
       underscored: true,
     },
   );
 
-  return Post;
+  return Comment;
 };

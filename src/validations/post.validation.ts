@@ -15,6 +15,10 @@ export interface PublishPostDTO {
   isPublished?: boolean;
 }
 
+export interface AddPostCommentDTO {
+  content: string;
+}
+
 export class PostValidation {
   createPost = [
     body('title').isString().isLength({ max: 255 }),
@@ -38,6 +42,14 @@ export class PostValidation {
   ];
 
   deletePost = [param('postId').isNumeric({ no_symbols: true }), validationMw];
+
+  addPostComment = [
+    param('postId').isNumeric({ no_symbols: true }),
+    body('content').isString(),
+    validationMw,
+  ];
+
+  getPostComments = [param('postId').isNumeric({ no_symbols: true }), validationMw];
 }
 
 export default new PostValidation();

@@ -1,5 +1,10 @@
 import { db } from '../models';
-import { CreatePostDTO, PublishPostDTO, UpdatePostDTO } from '../validations/post.validation';
+import {
+  AddPostCommentDTO,
+  CreatePostDTO,
+  PublishPostDTO,
+  UpdatePostDTO,
+} from '../validations/post.validation';
 
 export class PostService {
   constructor(private readonly database: typeof db) {}
@@ -48,6 +53,29 @@ export class PostService {
   async deletePost(authorId: number, postId: number) {
     const deletedPost = await this.database.post.destroy({ where: { id: postId, authorId } });
     return deletedPost;
+  }
+
+  async addPostComment(
+    commentatorId: number,
+    postId: number,
+    addPostCommentDTO: AddPostCommentDTO,
+  ) {
+    const { content } = addPostCommentDTO;
+    const addedComment = await this.database.comment.create({ commentatorId, postId, content });
+    return addedComment;
+  }
+
+  async getPostComments(postId: number) {
+    const postComments = await this.database.comment.findAll({
+      where: { postId },
+      include: [
+        {
+          model: this.database.user,
+          attributes: ['name'],
+        },
+      ],
+    });
+    return postComments;
   }
 }
 

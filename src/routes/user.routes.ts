@@ -9,5 +9,6 @@ export const userRoutes = Router();
 userRoutes.get('/', userController.getUsers);
 userRoutes.get('/me', authMw, userController.getMe);
 userRoutes.get('/me/posts', authMw, userController.getMyPosts);
+userRoutes.get('/me/comments', authMw, userController.getMyComments);
 userRoutes.get('/:userId', userValidation.getUser, userController.getUser);
 userRoutes.patch('/me', authMw, userValidation.updateMe, userController.updateMe);

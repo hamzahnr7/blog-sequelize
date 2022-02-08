@@ -8,33 +8,27 @@ module.exports = {
    * @param {sequelize} Sequelize
    */
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('posts', {
+    await queryInterface.createTable('comments', {
       id: {
         type: Sequelize.BIGINT,
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
       },
-      authorId: {
+      commentatorId: {
         type: Sequelize.BIGINT,
-        field: 'author_id',
-        references: {
-          model: 'users',
-          key: 'id',
-        },
+        field: 'commentator_id',
       },
-      title: {
-        type: Sequelize.STRING,
-        allowNull: false,
+      postId: {
+        type: Sequelize.BIGINT,
+        field: 'post_id',
       },
       content: {
         type: Sequelize.TEXT,
         allowNull: false,
-        defaultValue: '',
       },
-      isPublished: {
+      hidden: {
         type: Sequelize.BOOLEAN,
-        field: 'is_published',
         allowNull: false,
         defaultValue: false,
       },
@@ -58,6 +52,6 @@ module.exports = {
    * @param {sequelize} Sequelize
    */
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('posts');
+    await queryInterface.dropTable('comments');
   },
 };

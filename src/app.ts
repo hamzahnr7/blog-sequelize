@@ -33,12 +33,23 @@ app.use(async (req, res, next) => {
 // error handler
 app.use((async (err, req, res, next) => {
   // set locals, only providing error in development
+  const error = [
+    {
+      name: err.name,
+      msg: err.message,
+      ...(req.app.get('env') === 'development' ? { stack: err.stack, err } : {}),
+    },
+  ];
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
+  res.locals.err = error;
 
   // render the error page
   res.status(err.status || 500);
-  res.render('error');
+  next();
 }) as ErrorRequestHandler);
+app.use((req, res) => {
+  res.json(res.locals.err);
+});
 
 export default app;
