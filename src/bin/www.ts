@@ -26,6 +26,12 @@ const server = createServer(app);
 server.listen(port);
 server.on('error', onError);
 server.on('listening', onListening);
+server.on('SIGTERM', () => {
+  dbg('SIGTERM signal received: closing HTTP server');
+  server.close(() => {
+    dbg('HTTP server closed');
+  });
+});
 
 /**
  * Normalize a port into a number, string, or false.
