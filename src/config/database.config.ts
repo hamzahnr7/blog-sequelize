@@ -12,17 +12,17 @@ interface DatabaseConfig {
 
 const databaseConfig: DatabaseConfig = {
   development: {
-    url: 'postgres://postgres:postgres@localhost:5432/blog_sequelize',
+    url: process.env.DATABASE_URL,
     dialect: 'postgres',
     logging: console.log,
   },
   test: {
-    url: 'postgres://postgres:postgres@localhost:5432/blog_sequelize',
+    url: process.env.DATABASE_URL,
     dialect: 'postgres',
     logging: false,
   },
   production: {
-    url: 'postgres://postgres:postgres@localhost:5432/blog_sequelize',
+    url: process.env.DATABASE_URL,
     dialect: 'postgres',
     logging: false,
     pool: {

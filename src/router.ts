@@ -1,5 +1,5 @@
 import { RequestHandler, Router } from 'express';
-import { authRoutes, userRoutes } from './routes';
+import { authRoutes, postRoutes, userRoutes } from './routes';
 
 const router = Router();
 
@@ -10,8 +10,7 @@ router.get('/', (async (req, res, next) => {
 
 router.use('/', authRoutes);
 
-//#region users
 router.use('/users', userRoutes);
-//#endregion
+router.use('/posts', postRoutes);
 
 export default router;

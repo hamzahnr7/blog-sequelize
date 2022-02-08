@@ -29,6 +29,9 @@ export class User extends Model<UserAttributes, UserCreationAttributes> {
    */
   static associate(models: Models) {
     // define association here
+    this.hasMany(models.post, {
+      foreignKey: 'authorId',
+    });
   }
 }
 

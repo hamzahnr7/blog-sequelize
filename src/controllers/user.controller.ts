@@ -15,6 +15,11 @@ export class UserController {
     res.json(user);
   });
 
+  getMyPosts = expressAsyncHandler(async (req, res) => {
+    const user = await this.userService.getMyPost(req.user?.id!);
+    res.json(user);
+  });
+
   getUser = expressAsyncHandler<{ userId: string }>(async (req, res) => {
     const user = await this.userService.getUser(parseInt(req.params.userId));
     res.json(user);

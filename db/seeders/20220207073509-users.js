@@ -1,6 +1,9 @@
 'use strict';
 
+const { hash, genSalt } = require('bcrypt');
 const Sequelize = require('sequelize');
+
+const hashPassword = async (password) => await hash(password, await genSalt(12));
 
 module.exports = {
   /**
@@ -21,9 +24,9 @@ module.exports = {
     const users = [
       {
         id: 1,
-        name: 'Sulthon Abdulmalik',
-        email: 'sulthon@gmail.com',
-        password: 'asdf1234',
+        name: 'Detteksie Smantie',
+        email: 'detteksie@mailsac.com',
+        password: await hashPassword('asdf1234'),
         created_at: new Date(),
         updated_at: new Date(),
       },

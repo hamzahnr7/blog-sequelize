@@ -1,5 +1,6 @@
 import { DataTypes, Sequelize } from 'sequelize';
 import databaseConfig from '../config/database.config';
+import { post, Post } from './post.model';
 import { User, user } from './user.model';
 
 const env = process.env.NODE_ENV! || 'development';
@@ -7,6 +8,7 @@ const config = databaseConfig[env as keyof typeof databaseConfig];
 
 export interface Models {
   user: typeof User;
+  post: typeof Post;
 }
 
 let sequelize: Sequelize = config.url
@@ -15,6 +17,7 @@ let sequelize: Sequelize = config.url
 
 const models: Models = {
   user: user(sequelize, DataTypes),
+  post: post(sequelize, DataTypes),
 };
 
 Object.keys(models).forEach((modelName) => {

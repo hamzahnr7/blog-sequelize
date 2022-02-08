@@ -17,6 +17,20 @@ export class UserService {
     return user;
   }
 
+  async getMyPost(userId: number) {
+    const user = await this.database.user.findByPk(userId, {
+      include: [
+        {
+          model: this.database.post,
+        },
+      ],
+    });
+    if (!user) {
+      throw createHttpError(404, 'User not found');
+    }
+    return user;
+  }
+
   async updateUser(myUserId: number, updateUserDTO: UpdateUserDTO) {
     const { name, birthdate } = updateUserDTO;
     const updatedProfile = await this.database.user.update(

@@ -12,7 +12,8 @@
     "start:dev": "cross-env NODE_ENV=development env-cmd ts-node-dev --rs --respawn --transpile-only src/bin/www",
     "start:debug": "cross-env DEBUG=blog-sequelize:* npm run start:dev",
     "prepare": "husky install",
-    "prettify": "prettier -w \"{config,db,public,src}/**/*.{md,html,css,json,js,ts}\""
+    "prettify": "prettier -w \"{config,db,public,src}/**/*.{md,html,css,json,js,ts}\"",
+    "seq": "env-cmd sequelize"
   },
   "dependencies": {
     "@types/validator": "^13.7.1",
