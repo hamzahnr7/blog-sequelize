@@ -1,3 +1,4 @@
+import createHttpError from 'http-errors';
 import { db } from '../models';
 import {
   AddPostCommentDTO,
@@ -16,7 +17,7 @@ export class PostService {
   }
 
   async getPosts() {
-    const posts = await this.database.post.findAll();
+    const posts = await this.database.post.findAll({ where: { isPublished: true } });
     return posts;
   }
 
@@ -29,6 +30,7 @@ export class PostService {
         },
       ],
     });
+    if (!post?.isPublished) throw createHttpError(404, 'Post not found');
     return post;
   }
 
@@ -67,7 +69,7 @@ export class PostService {
 
   async getPostComments(postId: number) {
     const postComments = await this.database.comment.findAll({
-      where: { postId },
+      where: { postId, hidden: false },
       include: [
         {
           model: this.database.user,

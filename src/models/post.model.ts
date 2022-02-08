@@ -16,7 +16,7 @@ export class Post extends Model<PostAttributes, PostCreationAttributes> {
   declare authorId: number | null;
   declare title: string;
   declare content: string;
-  declare boolean: boolean;
+  declare isPublished: boolean;
 
   declare createdAt: CreationOptional<Date>;
   declare updatedAt: CreationOptional<Date>;
