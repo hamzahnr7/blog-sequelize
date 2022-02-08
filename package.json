@@ -54,6 +54,23 @@
     "ts-node-dev": "^1.1.8",
     "typescript": "^4.5.5"
   },
+  "keywords": [
+    "node",
+    "nodejs",
+    "express",
+    "expressjs",
+    "sql",
+    "postgresql",
+    "sequelize",
+    "sequelize-cli",
+    "crud",
+    "restapi",
+    "jwt",
+    "blog"
+  ],
+  "repository": "https://github.com/detteksie/blog-sequelize.git",
+  "bugs": "https://github.com/detteksie/blog-sequelize/issues",
+  "homepage": "https://github.com/detteksie/blog-sequelize#readme",
   "lint-staged": {
     "*.{md,html,css,json,js,ts}": "prettier -w"
   }
