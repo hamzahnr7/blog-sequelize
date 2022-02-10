@@ -1,25 +1,64 @@
-import { CreationOptional, DataTypes, Model, Optional, Sequelize } from 'sequelize';
+import {
+  Association,
+  BelongsToCreateAssociationMixin,
+  BelongsToGetAssociationMixin,
+  BelongsToSetAssociationMixin,
+  CreationOptional,
+  DataTypes,
+  HasManyAddAssociationMixin,
+  HasManyAddAssociationsMixin,
+  HasManyCountAssociationsMixin,
+  HasManyCreateAssociationMixin,
+  HasManyGetAssociationsMixin,
+  HasManyHasAssociationMixin,
+  HasManyHasAssociationsMixin,
+  HasManyRemoveAssociationMixin,
+  HasManyRemoveAssociationsMixin,
+  HasManySetAssociationsMixin,
+  InferAttributes,
+  InferCreationAttributes,
+  Model,
+  NonAttribute,
+  Optional,
+  Sequelize,
+} from 'sequelize';
 import { Models } from '.';
+import { Comment } from './comment.model';
+import { User } from './user.model';
 
-type PostAttributes = {
-  id: number;
-  authorId?: number;
-  title: string;
-  content: string;
-  isPublished?: boolean;
-};
-
-type PostCreationAttributes = Optional<PostAttributes, 'id'>;
-
-export class Post extends Model<PostAttributes, PostCreationAttributes> {
+export class Post extends Model<InferAttributes<Post>, InferCreationAttributes<Post>> {
   declare id: CreationOptional<number>;
   declare authorId: number | null;
   declare title: string;
   declare content: string;
-  declare isPublished: boolean;
+  declare isPublished: CreationOptional<boolean>;
 
   declare createdAt: CreationOptional<Date>;
   declare updatedAt: CreationOptional<Date>;
+
+  declare getAuthor: BelongsToGetAssociationMixin<User>;
+  declare createAuthor: BelongsToCreateAssociationMixin<User>;
+  declare setAuthor: BelongsToSetAssociationMixin<User, number>;
+  // `author` is an eagerly-loaded association.
+  // We tag it as `NonAttribute`
+  declare author?: NonAttribute<User>;
+
+  declare getComments: HasManyGetAssociationsMixin<Comment>;
+  declare addComment: HasManyAddAssociationMixin<Comment, number>;
+  declare addComments: HasManyAddAssociationsMixin<Comment, number>;
+  declare setComments: HasManySetAssociationsMixin<Comment, number>;
+  declare removeComment: HasManyRemoveAssociationMixin<Comment, number>;
+  declare removeComments: HasManyRemoveAssociationsMixin<Comment, number>;
+  declare hasComment: HasManyHasAssociationMixin<Comment, number>;
+  declare hasComments: HasManyHasAssociationsMixin<Comment, number>;
+  declare countComments: HasManyCountAssociationsMixin;
+  declare createComment: HasManyCreateAssociationMixin<Comment, 'commentatorId'>;
+  declare comments?: NonAttribute<Comment[]>;
+
+  declare static associations: {
+    author: Association<Post, User>;
+    comments: Association<Post, Comment>;
+  };
 
   /**
    * Helper method for defining associations.
@@ -71,6 +110,8 @@ export const post = (sequelize: Sequelize, DT: typeof DataTypes) => {
         allowNull: false,
         defaultValue: false,
       },
+      createdAt: DataTypes.DATE,
+      updatedAt: DataTypes.DATE,
     },
     {
       sequelize,

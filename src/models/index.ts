@@ -1,6 +1,6 @@
 import { DataTypes, Sequelize } from 'sequelize';
 import databaseConfig from '../config/database.config';
-import { comment, Comment } from './comment';
+import { comment, Comment } from './comment.model';
 import { post, Post } from './post.model';
 import { User, user } from './user.model';
 

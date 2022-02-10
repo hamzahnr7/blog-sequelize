@@ -1,25 +1,45 @@
-import { CreationOptional, DataTypes, Model, Optional, Sequelize } from 'sequelize';
+import {
+  Association,
+  BelongsToCreateAssociationMixin,
+  BelongsToGetAssociationMixin,
+  BelongsToSetAssociationMixin,
+  CreationOptional,
+  DataTypes,
+  InferAttributes,
+  InferCreationAttributes,
+  Model,
+  NonAttribute,
+  Optional,
+  Sequelize,
+} from 'sequelize';
 import { Models } from '.';
+import { Post } from './post.model';
+import { User } from './user.model';
 
-type CommentAttributes = {
-  id: number;
-  commentatorId: number;
-  postId: number;
-  content: string;
-  hidden?: boolean;
-};
-
-type CommentCreationAttributes = Optional<CommentAttributes, 'id'>;
-
-export class Comment extends Model<CommentAttributes, CommentCreationAttributes> {
+export class Comment extends Model<InferAttributes<Comment>, InferCreationAttributes<Comment>> {
   declare id: CreationOptional<number>;
   declare commentatorId: number;
   declare postId: number;
   declare content: string;
-  declare hidden: boolean;
+  declare hidden: CreationOptional<boolean>;
 
   declare createdAt: CreationOptional<Date>;
   declare updatedAt: CreationOptional<Date>;
+
+  declare getCommentator: BelongsToGetAssociationMixin<User>;
+  declare createCommentator: BelongsToCreateAssociationMixin<User>;
+  declare setCommentator: BelongsToSetAssociationMixin<User, number>;
+  declare commentator?: NonAttribute<User>;
+
+  declare getPost: BelongsToGetAssociationMixin<Post>;
+  declare createPost: BelongsToCreateAssociationMixin<Post>;
+  declare setPost: BelongsToSetAssociationMixin<Post, number>;
+  declare post?: NonAttribute<Post>;
+
+  declare static associations: {
+    commentator: Association<Comment, User>;
+    post: Association<Comment, Post>;
+  };
 
   /**
    * Helper method for defining associations.
@@ -61,6 +81,8 @@ export const comment = (sequelize: Sequelize, DT: typeof DataTypes) => {
         allowNull: false,
         defaultValue: false,
       },
+      createdAt: DataTypes.DATE,
+      updatedAt: DataTypes.DATE,
     },
     {
       sequelize,

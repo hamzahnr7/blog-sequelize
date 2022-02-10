@@ -1,26 +1,78 @@
-import { CreationOptional, DataTypes, Model, Optional, Sequelize } from 'sequelize';
+import {
+  Association,
+  CreationOptional,
+  DataTypes,
+  HasManyAddAssociationMixin,
+  HasManyAddAssociationsMixin,
+  HasManyCountAssociationsMixin,
+  HasManyCreateAssociationMixin,
+  HasManyGetAssociationsMixin,
+  HasManyHasAssociationMixin,
+  HasManyHasAssociationsMixin,
+  HasManyRemoveAssociationMixin,
+  HasManyRemoveAssociationsMixin,
+  HasManySetAssociationsMixin,
+  InferAttributes,
+  InferCreationAttributes,
+  Model,
+  NonAttribute,
+  Sequelize,
+} from 'sequelize';
 import { Models } from '.';
 import { hashPassword } from '../utils/bcrypt.helper';
+import { Comment } from './comment.model';
+import { Post } from './post.model';
 
-type UserAttributes = {
-  id: number;
-  name: string;
-  email: string;
-  password: string;
-  birthdate?: Date;
-};
-
-type UserCreationAttributes = Optional<UserAttributes, 'id'>;
-
-export class User extends Model<UserAttributes, UserCreationAttributes> {
+export class User extends Model<
+  InferAttributes<User, { omit: 'posts' | 'comments' }>,
+  InferCreationAttributes<User, { omit: 'posts' | 'comments' }>
+> {
+  // id can be undefined during creation when using `autoIncrement`
   declare id: CreationOptional<number>;
   declare name: string;
   declare email: string;
   declare password: string;
   declare birthdate: Date | null;
 
+  // timestamps!
+  // createdAt can be undefined during creation
   declare createdAt: CreationOptional<Date>;
+  // updatedAt can be undefined during creation
   declare updatedAt: CreationOptional<Date>;
+
+  // Since TS cannot determine model association at compile time
+  // we have to declare them here purely virtually
+  // these will not exist until `Model.init` was called.
+  declare getPosts: HasManyGetAssociationsMixin<Post>; // Note the null assertions!
+  declare addPost: HasManyAddAssociationMixin<Post, number>;
+  declare addPosts: HasManyAddAssociationsMixin<Post, number>;
+  declare setPosts: HasManySetAssociationsMixin<Post, number>;
+  declare removePost: HasManyRemoveAssociationMixin<Post, number>;
+  declare removePosts: HasManyRemoveAssociationsMixin<Post, number>;
+  declare hasPost: HasManyHasAssociationMixin<Post, number>;
+  declare hasPosts: HasManyHasAssociationsMixin<Post, number>;
+  declare countPosts: HasManyCountAssociationsMixin;
+  declare createPost: HasManyCreateAssociationMixin<Post, 'authorId'>;
+  // You can also pre-declare possible inclusions, these will only be populated if you
+  // actively include a relation.
+  declare posts?: NonAttribute<Post[]>; // Note this is optional since it's only populated when explicitly requested in code
+
+  declare getComments: HasManyGetAssociationsMixin<Comment>;
+  declare addComment: HasManyAddAssociationMixin<Comment, number>;
+  declare addComments: HasManyAddAssociationsMixin<Comment, number>;
+  declare setComments: HasManySetAssociationsMixin<Comment, number>;
+  declare removeComment: HasManyRemoveAssociationMixin<Comment, number>;
+  declare removeComments: HasManyRemoveAssociationsMixin<Comment, number>;
+  declare hasComment: HasManyHasAssociationMixin<Comment, number>;
+  declare hasComments: HasManyHasAssociationsMixin<Comment, number>;
+  declare countComments: HasManyCountAssociationsMixin;
+  declare createComment: HasManyCreateAssociationMixin<Comment, 'commentatorId'>;
+  declare comments?: NonAttribute<Comment[]>;
+
+  declare static associations: {
+    posts: Association<User, Post>;
+    comments: Association<User, Comment>;
+  };
 
   /**
    * Helper method for defining associations.
@@ -78,6 +130,8 @@ export const user = (sequelize: Sequelize, DT: typeof DataTypes) => {
           },
         },
       },
+      createdAt: DataTypes.DATE,
+      updatedAt: DataTypes.DATE,
     },
     {
       sequelize,
