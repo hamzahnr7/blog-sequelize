@@ -12,14 +12,14 @@ export class AuthService {
   }
 
   async findEmail(email: string) {
-    const user = await this.database.user.findOne({ where: { email } });
+    const user = await this.database.User.findOne({ where: { email } });
     if (user) throw createHttpError(409, 'Email already exist');
   }
 
   async register(registerUserDTO: RegisterUserDTO) {
     const { name, email, password, birthdate } = registerUserDTO;
     await this.findEmail(email);
-    const user = await this.database.user.create({
+    const user = await this.database.User.create({
       name,
       email,
       password,
@@ -30,7 +30,7 @@ export class AuthService {
 
   async login(loginDTO: LoginUserDTO) {
     const { email, password } = loginDTO;
-    const user = await this.database.user.findOne({
+    const user = await this.database.User.findOne({
       where: { email },
       attributes: { include: ['password'] },
     });

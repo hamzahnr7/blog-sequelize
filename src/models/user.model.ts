@@ -81,16 +81,16 @@ export class User extends Model<
    */
   static associate(models: Models) {
     // define association here
-    this.hasMany(models.post, {
+    this.hasMany(models.Post, {
       foreignKey: 'authorId',
     });
-    this.hasMany(models.comment, {
+    this.hasMany(models.Comment, {
       foreignKey: 'commentatorId',
     });
   }
 }
 
-export const user = (sequelize: Sequelize, DT: typeof DataTypes) => {
+export const userModel = (sequelize: Sequelize, DT: typeof DataTypes) => {
   User.init(
     {
       id: {
@@ -135,7 +135,7 @@ export const user = (sequelize: Sequelize, DT: typeof DataTypes) => {
     },
     {
       sequelize,
-      modelName: 'user',
+      modelName: 'User',
       underscored: true,
       defaultScope: { attributes: { exclude: ['password'] } },
       hooks: {

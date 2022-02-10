@@ -19,7 +19,6 @@ import {
   InferCreationAttributes,
   Model,
   NonAttribute,
-  Optional,
   Sequelize,
 } from 'sequelize';
 import { Models } from '.';
@@ -67,15 +66,15 @@ export class Post extends Model<InferAttributes<Post>, InferCreationAttributes<P
    */
   static associate(models: Models) {
     // define association here
-    this.belongsTo(models.user, {
+    this.belongsTo(models.User, {
       foreignKey: 'authorId',
       as: 'author',
     });
-    this.hasMany(models.comment);
+    this.hasMany(models.Comment);
   }
 }
 
-export const post = (sequelize: Sequelize, DT: typeof DataTypes) => {
+export const postModel = (sequelize: Sequelize, DT: typeof DataTypes) => {
   Post.init(
     {
       id: {
@@ -115,7 +114,7 @@ export const post = (sequelize: Sequelize, DT: typeof DataTypes) => {
     },
     {
       sequelize,
-      modelName: 'post',
+      modelName: 'Cost',
       underscored: true,
     },
   );

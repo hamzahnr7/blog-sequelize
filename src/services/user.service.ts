@@ -6,11 +6,11 @@ export class UserService {
   constructor(private database: typeof db) {}
 
   async getUsers() {
-    return this.database.user.findAll();
+    return this.database.User.findAll();
   }
 
   async getUser(userId: number) {
-    const user = await this.database.user.findByPk(userId);
+    const user = await this.database.User.findByPk(userId);
     if (!user) {
       throw createHttpError(404, 'User not found');
     }
@@ -18,10 +18,10 @@ export class UserService {
   }
 
   async getMyPost(userId: number) {
-    const user = await this.database.user.findByPk(userId, {
+    const user = await this.database.User.findByPk(userId, {
       include: [
         {
-          model: this.database.post,
+          model: this.database.Post,
         },
       ],
     });
@@ -32,10 +32,10 @@ export class UserService {
   }
 
   async getMyComments(userId: number) {
-    const user = await this.database.user.findByPk(userId, {
+    const user = await this.database.User.findByPk(userId, {
       include: [
         {
-          model: this.database.comment,
+          model: this.database.Comment,
         },
       ],
     });
@@ -47,7 +47,7 @@ export class UserService {
 
   async updateUser(myUserId: number, updateUserDTO: UpdateUserDTO) {
     const { name, birthdate } = updateUserDTO;
-    const updatedProfile = await this.database.user.update(
+    const updatedProfile = await this.database.User.update(
       { name, birthdate },
       {
         where: { id: myUserId },

@@ -9,7 +9,6 @@ import {
   InferCreationAttributes,
   Model,
   NonAttribute,
-  Optional,
   Sequelize,
 } from 'sequelize';
 import { Models } from '.';
@@ -48,14 +47,14 @@ export class Comment extends Model<InferAttributes<Comment>, InferCreationAttrib
    */
   static associate(models: Models) {
     // define association here
-    this.belongsTo(models.user, {
+    this.belongsTo(models.User, {
       foreignKey: 'commentatorId',
     });
-    this.belongsTo(models.post);
+    this.belongsTo(models.Post);
   }
 }
 
-export const comment = (sequelize: Sequelize, DT: typeof DataTypes) => {
+export const commentModel = (sequelize: Sequelize, DT: typeof DataTypes) => {
   Comment.init(
     {
       id: {
@@ -86,7 +85,7 @@ export const comment = (sequelize: Sequelize, DT: typeof DataTypes) => {
     },
     {
       sequelize,
-      modelName: 'comment',
+      modelName: 'Comment',
       underscored: true,
     },
   );

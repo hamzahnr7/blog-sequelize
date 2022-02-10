@@ -12,20 +12,20 @@ export class PostService {
 
   async createPost(authorId: number, createPostDTO: CreatePostDTO) {
     const { title, content } = createPostDTO;
-    const newPost = await this.database.post.create({ authorId, title, content });
+    const newPost = await this.database.Post.create({ authorId, title, content });
     return newPost;
   }
 
   async getPosts() {
-    const posts = await this.database.post.findAll({ where: { isPublished: true } });
+    const posts = await this.database.Post.findAll({ where: { isPublished: true } });
     return posts;
   }
 
   async getPost(postId: number) {
-    const post = await this.database.post.findByPk(postId, {
+    const post = await this.database.Post.findByPk(postId, {
       include: [
         {
-          model: this.database.user,
+          model: this.database.User,
           as: 'author',
         },
       ],
@@ -36,7 +36,7 @@ export class PostService {
 
   async updatePost(authorId: number, postId: number, updatePostDTO: UpdatePostDTO) {
     const { title, content } = updatePostDTO;
-    const updatedPost = await this.database.post.update(
+    const updatedPost = await this.database.Post.update(
       { title, content },
       { where: { id: postId, authorId } },
     );
@@ -45,7 +45,7 @@ export class PostService {
 
   async publishPost(authorId: number, postId: number, publishPostDTO: PublishPostDTO) {
     const { isPublished } = publishPostDTO;
-    const updatedPost = await this.database.post.update(
+    const updatedPost = await this.database.Post.update(
       { isPublished },
       { where: { id: postId, authorId } },
     );
@@ -53,7 +53,7 @@ export class PostService {
   }
 
   async deletePost(authorId: number, postId: number) {
-    const deletedPost = await this.database.post.destroy({ where: { id: postId, authorId } });
+    const deletedPost = await this.database.Post.destroy({ where: { id: postId, authorId } });
     return deletedPost;
   }
 
@@ -63,16 +63,16 @@ export class PostService {
     addPostCommentDTO: AddPostCommentDTO,
   ) {
     const { content } = addPostCommentDTO;
-    const addedComment = await this.database.comment.create({ commentatorId, postId, content });
+    const addedComment = await this.database.Comment.create({ commentatorId, postId, content });
     return addedComment;
   }
 
   async getPostComments(postId: number) {
-    const postComments = await this.database.comment.findAll({
+    const postComments = await this.database.Comment.findAll({
       where: { postId, hidden: false },
       include: [
         {
-          model: this.database.user,
+          model: this.database.User,
           attributes: ['name'],
         },
       ],

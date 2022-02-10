@@ -10,7 +10,7 @@ export class CommentService {
     updateCommentDTO: UpdateCommentDTO,
   ) {
     const { content } = updateCommentDTO;
-    const updatedComment = await this.database.comment.update(
+    const updatedComment = await this.database.Comment.update(
       { content },
       { where: { id: commentId, commentatorId } },
     );
@@ -19,7 +19,7 @@ export class CommentService {
 
   async hideComment(commentatorId: number, commentId: number, updateCommentDTO: HideCommentDTO) {
     const { hidden } = updateCommentDTO;
-    const updatedComment = await this.database.comment.update(
+    const updatedComment = await this.database.Comment.update(
       { hidden },
       { where: { id: commentId, commentatorId } },
     );
@@ -27,7 +27,7 @@ export class CommentService {
   }
 
   async deleteComment(commentatorId: number, commentId: number) {
-    const deletedComment = await this.database.comment.destroy({
+    const deletedComment = await this.database.Comment.destroy({
       where: { id: commentId, commentatorId },
     });
     return deletedComment;
