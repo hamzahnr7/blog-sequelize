@@ -1,0 +1,28 @@
+version: '3.4'
+
+services:
+  db:
+    image: postgres:12-alpine
+    restart: always
+    volumes:
+      - data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: blog_sequelize
+  server:
+    image: detteksie/blog-sequelize
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    environment:
+      NODE_ENV: development
+      DEBUG: blog-sequelize:*
+      JWT_SECRET: H3ll0W0rld!
+      DATABASE_URL: postgres://postgres:postgres@db:5432/blog_sequelize
+    ports:
+      - 4000:4000
+      - 9229:9229
+    command: [ "node", "--inspect=0.0.0.0:9229", "build/bin/www" ]
+
+volumes:
+  data:

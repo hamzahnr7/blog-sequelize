@@ -22,8 +22,8 @@ export class Comment extends Model<InferAttributes<Comment>, InferCreationAttrib
   declare content: string;
   declare hidden: CreationOptional<boolean>;
 
-  declare createdAt: CreationOptional<Date>;
-  declare updatedAt: CreationOptional<Date>;
+  declare createdAt?: CreationOptional<Date>;
+  declare updatedAt?: CreationOptional<Date>;
 
   declare getCommentator: BelongsToGetAssociationMixin<User>;
   declare createCommentator: BelongsToCreateAssociationMixin<User>;
@@ -80,12 +80,10 @@ export const commentModel = (sequelize: Sequelize, DT: typeof DataTypes) => {
         allowNull: false,
         defaultValue: false,
       },
-      createdAt: DataTypes.DATE,
-      updatedAt: DataTypes.DATE,
     },
     {
       sequelize,
-      modelName: 'Comment',
+      modelName: 'comment',
       underscored: true,
     },
   );

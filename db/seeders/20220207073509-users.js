@@ -38,6 +38,7 @@ module.exports = {
         name: 'Samara98',
         email: 'samara98@mailsac.com',
         password: await hashPassword('asdf1346'),
+        birthdate: new Date('1998-12-29'),
         created_at: new Date(),
         updated_at: new Date(),
       },

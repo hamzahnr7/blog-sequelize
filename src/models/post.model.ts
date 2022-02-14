@@ -32,8 +32,8 @@ export class Post extends Model<InferAttributes<Post>, InferCreationAttributes<P
   declare content: string;
   declare isPublished: CreationOptional<boolean>;
 
-  declare createdAt: CreationOptional<Date>;
-  declare updatedAt: CreationOptional<Date>;
+  declare createdAt?: CreationOptional<Date>;
+  declare updatedAt?: CreationOptional<Date>;
 
   declare getAuthor: BelongsToGetAssociationMixin<User>;
   declare createAuthor: BelongsToCreateAssociationMixin<User>;
@@ -109,12 +109,10 @@ export const postModel = (sequelize: Sequelize, DT: typeof DataTypes) => {
         allowNull: false,
         defaultValue: false,
       },
-      createdAt: DataTypes.DATE,
-      updatedAt: DataTypes.DATE,
     },
     {
       sequelize,
-      modelName: 'Cost',
+      modelName: 'post',
       underscored: true,
     },
   );

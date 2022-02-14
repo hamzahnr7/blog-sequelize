@@ -10,7 +10,7 @@ export const authMw = expressAsyncHandler(async (req, res, next) => {
 
   const payload = verifyToken(token) as JwtPayload;
 
-  const user = await db.user.findByPk(payload.sub);
+  const user = await db.User.findByPk(payload.sub);
   req.user = user;
 
   next();

@@ -36,9 +36,9 @@ export class User extends Model<
 
   // timestamps!
   // createdAt can be undefined during creation
-  declare createdAt: CreationOptional<Date>;
+  declare createdAt?: CreationOptional<Date>;
   // updatedAt can be undefined during creation
-  declare updatedAt: CreationOptional<Date>;
+  declare updatedAt?: CreationOptional<Date>;
 
   // Since TS cannot determine model association at compile time
   // we have to declare them here purely virtually
@@ -130,12 +130,10 @@ export const userModel = (sequelize: Sequelize, DT: typeof DataTypes) => {
           },
         },
       },
-      createdAt: DataTypes.DATE,
-      updatedAt: DataTypes.DATE,
     },
     {
       sequelize,
-      modelName: 'User',
+      modelName: 'user',
       underscored: true,
       defaultScope: { attributes: { exclude: ['password'] } },
       hooks: {
