@@ -13,6 +13,7 @@ const databaseConfig = {
     url: process.env.DATABASE_URL,
     dialect: 'postgres',
     logging: false,
+    ssl: true,
     pool: {
       min: 1,
       max: 5,
