@@ -14,6 +14,9 @@ const databaseConfig = {
     dialect: 'postgres',
     logging: false,
     ssl: true,
+    dialectOptions: {
+      ssl: true,
+    },
     pool: {
       min: 1,
       max: 5,
