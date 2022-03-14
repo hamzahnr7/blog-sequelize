@@ -27,7 +27,7 @@ const databaseConfig: DatabaseConfig = {
     logging: false,
     ssl: true,
     dialectOptions: {
-      ssl: true,
+      ssl: { rejectUnauthorized: false }
     },
     pool: {
       min: 1,
